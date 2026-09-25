@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AdSlot } from "@/components/ads/AdSlot";
+import { isAdPlacementActive } from "@/lib/adsense";
 import { JsonLd } from "@/components/JsonLd";
 import { PostCard } from "@/components/PostCard";
 import { getAllPosts } from "@/lib/posts";
@@ -135,7 +136,7 @@ export default function HomePage() {
               "@id": absoluteUrl("/#organization"),
               name: siteConfig.name,
               url: siteConfig.url,
-              logo: absoluteUrl("/icon.svg"),
+              logo: absoluteUrl("/apple-icon"),
             },
             {
               "@type": "WebSite",
@@ -236,9 +237,11 @@ export default function HomePage() {
       </section>
 
       {/* Ad placement — public content page */}
-      <div className="container-page pb-4">
-        <AdSlot placement="homeInline" />
-      </div>
+      {isAdPlacementActive("homeInline") && (
+        <div className="container-page pb-4">
+          <AdSlot placement="homeInline" />
+        </div>
+      )}
 
       {/* Latest articles */}
       <section className="py-20 sm:py-24">

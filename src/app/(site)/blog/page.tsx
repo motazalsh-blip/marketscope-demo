@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AdSlot } from "@/components/ads/AdSlot";
+import { isAdPlacementActive } from "@/lib/adsense";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHeader } from "@/components/PageHeader";
 import { CategoryBadge, PostCard, PostCover } from "@/components/PostCard";
@@ -64,9 +65,11 @@ export default function BlogIndexPage() {
             </div>
           </article>
 
-          <div className="my-12">
-            <AdSlot placement="blogIndex" />
-          </div>
+          {isAdPlacementActive("blogIndex") && (
+            <div className="my-12">
+              <AdSlot placement="blogIndex" />
+            </div>
+          )}
 
           <h2 className="text-xl font-semibold text-navy-900">All articles</h2>
           <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">

@@ -61,7 +61,7 @@ src/
 
 1. Get the production domain approved in Google AdSense.
 2. Set `NEXT_PUBLIC_ADSENSE_PUBLISHER_ID=ca-pub-XXXXXXXXXXXXXXXX`.
-3. Optionally set slot IDs (`NEXT_PUBLIC_ADSENSE_SLOT_*`, see `.env.example`).
+3. Set the slot IDs (`NEXT_PUBLIC_ADSENSE_SLOT_*`, see `.env.example`). Once ads are enabled, a placement without a slot ID renders nothing.
 4. Redeploy.
 
 Until then: no Google script is loaded, `<AdSlot />` shows labelled placeholders with a reserved height (no layout shift later), and `/ads.txt` returns a commented example. See `public/ads.txt.example`.

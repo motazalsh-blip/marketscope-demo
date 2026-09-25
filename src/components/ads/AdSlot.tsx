@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { adSlots, adsenseConfig, type AdPlacement } from "@/lib/adsense";
+import { adSlots, adsenseConfig, isAdPlacementActive, type AdPlacement } from "@/lib/adsense";
 
 type AdSlotProps = {
   placement: AdPlacement;
@@ -26,23 +26,27 @@ const sizeClasses = {
  * - Without a valid publisher ID it renders a labelled placeholder
  *   (same footprint as the real unit, so layout does not shift later).
  * - With NEXT_PUBLIC_ADSENSE_PUBLISHER_ID set, it renders a real
- *   responsive AdSense unit and requests an ad once on mount.
+ *   responsive AdSense unit and requests an ad once on mount. If the
+ *   placement has no valid slot ID configured, it renders nothing.
  *
  * Only use this on public content pages (home, blog, articles).
  */
 export function AdSlot({ placement, shape = "horizontal", className = "" }: AdSlotProps) {
   const pushed = useRef(false);
   const slotId = adSlots[placement];
+  const active = isAdPlacementActive(placement);
 
   useEffect(() => {
-    if (!adsenseConfig.enabled || pushed.current) return;
+    if (!adsenseConfig.enabled || !active || pushed.current) return;
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
       pushed.current = true;
     } catch {
       // AdSense can throw if blocked by an extension; fail silently.
     }
-  }, []);
+  }, [active]);
+
+  if (!active) return null;
 
   if (!adsenseConfig.enabled) {
     return (

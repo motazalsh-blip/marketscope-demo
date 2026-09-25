@@ -5,6 +5,7 @@ import { ArticleBody } from "@/components/ArticleBody";
 import { JsonLd } from "@/components/JsonLd";
 import { Breadcrumbs } from "@/components/PageHeader";
 import { CategoryBadge, PostCard } from "@/components/PostCard";
+import { isAdPlacementActive } from "@/lib/adsense";
 import { formatDate, getAllPosts, getPostBySlug, getRelatedPosts } from "@/lib/posts";
 import { buildMetadata } from "@/lib/seo";
 import { absoluteUrl, siteConfig } from "@/lib/site";
@@ -31,6 +32,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }) 
     modifiedTime: post.updatedAt,
     authors: [post.author],
     tags: post.tags,
+    image: `/blog/${post.slug}/og.png`,
   });
 }
 
@@ -53,11 +55,11 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
               "@type": "BlogPosting",
               headline: post.title,
               description: post.description,
-              image: `${url}/opengraph-image`,
+              image: `${url}/og.png`,
               datePublished: post.publishedAt,
               dateModified: post.updatedAt,
               author: { "@type": "Person", name: post.author },
-              publisher: { "@type": "Organization", name: siteConfig.name, logo: absoluteUrl("/icon.svg") },
+              publisher: { "@type": "Organization", name: siteConfig.name, logo: absoluteUrl("/apple-icon") },
               mainEntityOfPage: url,
               keywords: post.tags.join(", "),
               articleSection: post.category,
@@ -121,7 +123,7 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
               and this is not financial or investment advice.
             </p>
 
-            <ArticleBody blocks={post.content} insert={<AdSlot placement="articleInline" />} />
+            <ArticleBody blocks={post.content} insert={isAdPlacementActive("articleInline") ? <AdSlot placement="articleInline" /> : undefined} />
 
             <footer className="mt-12 border-t border-slate-200 pt-6">
               <h2 className="sr-only">Tags</h2>
